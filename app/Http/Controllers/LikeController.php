@@ -18,15 +18,11 @@ class LikeController extends Controller
         return response()->json(['likes' => $likes, 'allLikes' => $allLikes], 200);
     }
 
-    public function getLikeCount(Request $request)
+    public function getAllLikes(Request $request)
     {
-        $likes = Like::where('user_id', '<=', $request->user()->id)->count();
+        $allLikes = Like::all();
 
-        // Alternative:
-        // $likes = DB::select('select * from new_project_backend.post_likes where user_id = :userId', ['userId' => $request->user()->id]);
-        // $likesCount = count($likes);
-
-        return response()->json(['likes' => $likes], 200);
+        return response()->json(['allLikes' => $allLikes], 200);
     }
 
     public function like(Post $post)

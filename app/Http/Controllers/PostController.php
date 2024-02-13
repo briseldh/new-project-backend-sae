@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\FileUpload;
+use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
 use Exception;
@@ -184,28 +185,12 @@ class PostController extends Controller
 
     public function getAll(Request $request)
     {
-        // try {
-        //     $policyResp = Gate::inspect('getAll', Post::class);
 
-        //     if ($policyResp->allowed()) {
-        //         $posts = Post::all();
-
-        //         return response()->json(['message' => $policyResp->message(), 'posts' => $posts], 200);
-        //     }
-
-        //     return response()->json(['message' => $policyResp->message()], 403);
-        // } catch (Exception $e) {
-        //     return response()->json(['message' => '===FATAL=== ' . $e->getMessage()], 500);
-        // }
-
-        // $posts = $post->all()->with();
-        // $comments = $comment->all();
-        // $files = $fileUpload->all();
-        $posts = Post::with('file', 'comments')->get();
+        $posts = Post::with('file', 'comments', 'postLikes')->get();
         $comments = Comment::with('user')->get();
-        // $likes = DB::select('select * from new_project_backend.post_likes where user_id = :userId', ['userId' => $request->user()->id]);
+        $allLikes = Like::all();
 
-        return response()->json(['posts' => $posts, 'comments' => $comments], 200);
+        return response()->json(['posts' => $posts, 'comments' => $comments, 'allLikes' => $allLikes], 200);
     }
 
     // public function uploadFile(Request $request, $postId)
