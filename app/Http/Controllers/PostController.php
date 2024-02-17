@@ -150,11 +150,17 @@ class PostController extends Controller
     {
         try {
             $post = Post::find($id);
+            $postImage = FileUpload::where('post_id', $post->id)->get();
 
             $policyResp = Gate::inspect('delete', $post);
 
             if ($policyResp->allowed()) {
                 $post->delete();
+
+                // $path = explode('/', $postImage->path);
+                // $fileName = $path[1];
+
+                // Storage::delete('public/' . $fileName);
 
                 return response()->json(['message' => $policyResp->message()], 200);
             }
@@ -192,48 +198,4 @@ class PostController extends Controller
 
         return response()->json(['posts' => $posts, 'comments' => $comments, 'allLikes' => $allLikes], 200);
     }
-
-    // public function uploadFile(Request $request, $postId)
-    // {
-    //     try {
-
-    //         $file = $request->file('avatar');
-    //         $post = Post::findOrFail($postId);
-    //         // if ($post->id !== $postId) {
-    //         //     return response()->json('post not found');
-    //         // }
-
-
-    //         $policyResp = Gate::inspect('uploadFile', $post);
-
-    //         if ($policyResp->allowed()) {
-
-    //             //-File Validation
-    //             $request->validate([
-    //                 'avatar' => ['required', 'mimes:jpeg,pdf', 'max:2048']
-    //             ]);
-
-    //             $fileName = date('Y-m-d') . '_' . time() . $file->getClientOriginalName();
-    //             $path = 'uploads/' . $fileName;
-    //             $onlyName = explode('.', $file->getClientOriginalName());
-
-    //             $post_images = new FileUpload();
-
-    //             $post_images->post_id = $post->id;
-    //             $post_images->path = $path;
-    //             $post_images->alt_text = $onlyName[0];
-    //             $post_images->uploaded_at = date('Y-m-d H:i:s');
-
-    //             $post_images->save();
-
-    //             Storage::putFileAs('uploads', $file, $fileName);
-
-    //             return response()->json(['message' => 'File uploaded successfully.'], 200);
-    //         }
-
-    //         return response()->json(['message' => $policyResp->message()], 403);
-    //     } catch (Exception $e) {
-    //         return response()->json(['message' => $e->getMessage()], 500);
-    //     }
-    // }
 }

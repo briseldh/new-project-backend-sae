@@ -17,7 +17,7 @@ class GetDataController extends Controller
     {
         //Todo return the asked data back
 
-        // if (!Auth::check($id)) {
+        // if (!Auth::check($request->user())) {
         //     return response()->json(['message' => 'No acces to the user data. Log in first.'], 403);
         // }
 

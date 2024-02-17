@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ProfilePicController extends Controller
@@ -129,7 +130,7 @@ class ProfilePicController extends Controller
             // $profilePic = $query[0];
             // return response()->json(['profilePic' => $profilePic], 404);
 
-
+            // return response()->json(['profilePic' => $profilePic], 200);
             if (!$profilePic) {
                 return response()->json(['message' => 'The profile picture that you want to delete can not be found'], 404);
             }
@@ -139,8 +140,13 @@ class ProfilePicController extends Controller
             $policyResp = Gate::inspect('delete', $profilePic);
 
             if ($policyResp->allowed()) {
-                $profilePic->delete();
 
+                $path = explode('/', $profilePic->path);
+                $fileName = $path[2];
+
+                Storage::delete('public/profileImgs/' . $fileName);
+
+                $profilePic->delete();
                 return response()->json(['message' => $policyResp->message()], 200);
             }
 
