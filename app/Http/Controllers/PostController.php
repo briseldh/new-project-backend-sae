@@ -150,17 +150,21 @@ class PostController extends Controller
     {
         try {
             $post = Post::find($id);
+
             $postImage = FileUpload::where('post_id', $post->id)->get();
+
 
             $policyResp = Gate::inspect('delete', $post);
 
             if ($policyResp->allowed()) {
+
+                $path = explode('/', $postImage[0]->path);
+
+                $fileName = $path[1];
+
+                Storage::delete('public/' . $fileName);
+
                 $post->delete();
-
-                // $path = explode('/', $postImage->path);
-                // $fileName = $path[1];
-
-                // Storage::delete('public/' . $fileName);
 
                 return response()->json(['message' => $policyResp->message()], 200);
             }
