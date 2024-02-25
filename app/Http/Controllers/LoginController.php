@@ -11,17 +11,15 @@ class LoginController extends Controller
 {
     public function __invoke(Request $request)
     {
-        // return response()->json(["message" => "Login successful"], 200);
-
-        // $request->validate([
-        //     'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        //     'password' => ['required', Password::min(8)
-        //         ->letters()
-        //         ->mixedCase()
-        //         ->numbers()
-        //         ->symbols()
-        //         ->uncompromised()]
-        // ]);
+        $request->validate([
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['required', Password::min(8)
+                ->letters()
+                ->mixedCase()
+                ->numbers()
+                ->symbols()
+                ->uncompromised()]
+        ]);
 
         if (!Auth::attempt($request->only('email', 'password'))) {
             $error = ['root' => ['Invalid credentials']];

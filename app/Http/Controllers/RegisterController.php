@@ -30,9 +30,6 @@ class RegisterController extends Controller
             // 'role' => "user"
         ]);
 
-        // TODO:
-        // Find a way to refresh the registrated user before logging him in.
-
         Auth::login($user);
         $request->session()->regenerate();
 

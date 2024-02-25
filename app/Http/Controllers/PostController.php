@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\FileUpload;
 use App\Models\Like;
 use App\Models\Post;
+use App\Models\ProfilePicUpload;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -25,9 +26,9 @@ class PostController extends Controller
             if ($policyResp->allowed()) {
 
                 $rules = [
-                    // 'user_id' => 'required|numeric', // Needed only when using Postman
+                    // 'user_id' => 'required|numeric', //Needed only when using Postman
                     'title' => 'required|min:5|max:50',
-                    'text' => 'required|min:10|max:2000',
+                    'text' => 'min:10|max:2000',
                     'avatar' => 'required|mimes:jpeg,pdf|max:2048'
                 ];
 
@@ -199,7 +200,8 @@ class PostController extends Controller
         $posts = Post::with('file', 'comments', 'postLikes')->get();
         $comments = Comment::with('user')->get();
         $allLikes = Like::all();
+        $allProfilePics = ProfilePicUpload::all();
 
-        return response()->json(['posts' => $posts, 'comments' => $comments, 'allLikes' => $allLikes], 200);
+        return response()->json(['posts' => $posts, 'comments' => $comments, 'allLikes' => $allLikes, 'allProfilePics' => $allProfilePics], 200);
     }
 }
