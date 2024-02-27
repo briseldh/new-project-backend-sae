@@ -86,3 +86,24 @@ Route::middleware('auth:web')->group(function () {
 Route::fallback(function () {
     return response()->json(['message' => 'Route Not Found'], 404);
 });
+
+
+
+// pm.sendRequest({
+//     url: 'http://localhost/sanctum/csrf-cookie',
+//     method: 'GET',
+// }, (error, response) => {
+//     console.log(error)
+//     console.log(response.headers.all())
+
+//     response.headers.all().find(( header ) => {
+//         if(header.key === "Set-Cookie"){
+//             if(header.value.startsWith("XSRF-TOKEN")){
+//                 const pattern = new RegExp(`(?<=XSRF-TOKEN=)[^;]+`, 'g');
+//                 const token = header.value.match(pattern)[0];
+//                 const decodedToken = decodeURIComponent(token)
+//                 pm.environment.set('xsrf-token', decodedToken)
+//             }
+//         }
+//     });
+// })
